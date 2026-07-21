@@ -28,25 +28,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import VendorForm from "../vendor-form/VendorForm";
 import { columns } from "./columns";
 import { vendors } from "../vendor-mock-data";
 import type { Vendor } from "@/types/vendorTypes";
 import { ArrowRightFromLine, Plus } from "lucide-react";
+import Link from "next/link";
 
 const VendorTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filter, setFilter] = useState("");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [isAddVendorOpen, setIsAddVendorOpen] = useState(false);
 
   const tableColumns = columns;
 
@@ -91,26 +85,21 @@ const VendorTable = () => {
           className="max-w-sm"
         />
         <div className="flex gap-4">
-          <Dialog>
-            <DialogTrigger>
-              <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-                <Plus className="mr-2 h-4 w-4" /> Add Vendor
-              </button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] w-screen overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Add Vendor</DialogTitle>
-                <DialogDescription>Fill out the vendor details step by step.</DialogDescription>
-              </DialogHeader>
-              <VendorForm />
-            </DialogContent>
-          </Dialog>
+          <Link
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 cursor-pointer"
+            href="vendors/add-vendor"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add Vendor
+          </Link>
           <Button variant="outline" className="border border-black">
             <ArrowRightFromLine className="mr-2 h-4 w-4" /> Export
           </Button>
         </div>
       </div>
 
+     
+
+      {/* Vendor Table */}
       <div className="overflow-x-auto rounded-xl border border-slate-200">
         <div className="min-w-180">
           <Table>
