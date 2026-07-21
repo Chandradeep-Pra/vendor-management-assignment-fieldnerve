@@ -8,6 +8,7 @@ export const columns: ColumnDef<Vendor>[] = [
   {
     accessorKey: "name",
     header: "Vendor Name",
+    sortingFn: "alphanumeric",
   },
   {
     accessorKey: "code",
@@ -24,10 +25,12 @@ export const columns: ColumnDef<Vendor>[] = [
   {
     accessorKey: "city",
     header: "City",
+    cell: ({ row }) => row.original.city,
   },
   {
     accessorKey: "rating",
     header: "Rating",
+    sortingFn: "alphanumeric",
   },
   {
     accessorKey: "status",
@@ -53,5 +56,6 @@ export const columns: ColumnDef<Vendor>[] = [
   {
     accessorKey: "totalPurchaseValue",
     header: "Purchase Value",
+    sortingFn: "alphanumeric",
   },
 ];
