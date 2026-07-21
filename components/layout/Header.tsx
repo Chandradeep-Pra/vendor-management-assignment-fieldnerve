@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Bell, UserCircle2 } from "lucide-react";
 import MobileNav from "./MobileNav";
 import { navigations } from "./navigations";
+import Link from "next/link";
 
 const HeaderLayout = () => {
   const pathname = usePathname();
@@ -19,12 +20,12 @@ const HeaderLayout = () => {
       <div className="text-lg font-semibold text-slate-800">{title}</div>
 
       <div className="flex items-center gap-3">
-        <div className="relative cursor-pointer">
+        <Link className="relative cursor-pointer" href="/notifications">
           <Bell size={24} className="text-slate-700" />
           <span className="absolute -right-1 -top-2 flex aspect-square h-5 w-5 items-center justify-center rounded-full bg-red-400 text-[10px] font-semibold text-white">
             2
           </span>
-        </div>
+        </Link>
 
         <MobileNav />
 
