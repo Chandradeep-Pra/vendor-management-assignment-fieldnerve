@@ -24,7 +24,7 @@ const MonthlyPurchaseChart = () => {
             tickFormatter={(value) => `$${value / 1000}k`}
           />
           <Tooltip
-            formatter={(value: number) => [`$${value.toLocaleString()}`, "Purchase"]}
+            formatter={(value) => [`$${Number(value ?? 0).toLocaleString()}`, "Purchase"]}
             cursor={{ fill: "#f8fafc" }}
           />
           <Bar dataKey="amount" fill="#2563eb" radius={[8, 8, 0, 0]} />

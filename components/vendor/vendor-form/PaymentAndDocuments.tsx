@@ -67,6 +67,9 @@ const PaymentAndDocuments = () => {
             />
           </div>
         </div>
+        {form.formState.errors.bankDetails ? (
+          <p className="mt-3 text-sm text-red-500">Please complete the bank details.</p>
+        ) : null}
       </div>
 
       <div className="space-y-2">

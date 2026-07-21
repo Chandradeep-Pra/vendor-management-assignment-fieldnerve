@@ -28,11 +28,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import VendorForm from "../vendor-form/VendorForm";
 import { columns } from "./columns";
 import { vendors } from "../vendor-mock-data";
 import type { Vendor } from "@/types/vendorTypes";
-import { ArrowRightFromLine, Plus } from "lucide-react";
+import { ArrowDownToLine, Columns3, Plus } from "lucide-react";
 import Link from "next/link";
 
 const VendorTable = () => {
@@ -40,7 +39,6 @@ const VendorTable = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filter, setFilter] = useState("");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
-  const [isAddVendorOpen, setIsAddVendorOpen] = useState(false);
 
   const tableColumns = columns;
 
@@ -75,24 +73,70 @@ const VendorTable = () => {
     return header.column.columnDef.header;
   };
 
+  const applySavedView = (view: "all" | "pending" | "blacklisted") => {
+    setColumnFilters(
+      view === "all" ? [] : [{ id: "status", value: view === "pending" ? "Pending" : "Blacklisted" }],
+    );
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+
+  const exportVendors = () => {
+    const visibleColumns = table.getVisibleLeafColumns();
+    const rows = table.getFilteredRowModel().rows;
+    const escapeCell = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+    const csv = [
+      visibleColumns.map((column) => escapeCell(column.columnDef.header)).join(","),
+      ...rows.map((row) => visibleColumns.map((column) => escapeCell(row.getValue(column.id))).join(",")),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "vendor-directory.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className=" flex gap-2 justify-between  w-full ">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <Input
           placeholder="Search vendors..."
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
           className="max-w-sm"
         />
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-2">
+          <div className="flex rounded-lg border border-border p-1">
+            <Button variant="ghost" size="sm" onClick={() => applySavedView("all")}>All vendors</Button>
+            <Button variant="ghost" size="sm" onClick={() => applySavedView("pending")}>Pending review</Button>
+            <Button variant="ghost" size="sm" onClick={() => applySavedView("blacklisted")}>Blacklisted</Button>
+          </div>
+          <details className="relative">
+            <summary className="inline-flex h-8 cursor-pointer list-none items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-sm font-medium hover:bg-muted">
+              <Columns3 className="h-4 w-4" /> Columns
+            </summary>
+            <div className="absolute right-0 z-30 mt-2 w-48 rounded-lg border border-border bg-white p-2 shadow-lg">
+              {table.getAllLeafColumns().map((column) => (
+                <label key={column.id} className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-muted">
+                  <input
+                    type="checkbox"
+                    checked={column.getIsVisible()}
+                    onChange={column.getToggleVisibilityHandler()}
+                  />
+                  {typeof column.columnDef.header === "string" ? column.columnDef.header : column.id}
+                </label>
+              ))}
+            </div>
+          </details>
           <Link
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 cursor-pointer"
-            href="vendors/add-vendor"
+            href="/vendors/add-vendor"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Vendor
           </Link>
-          <Button variant="outline" className="border border-black">
-            <ArrowRightFromLine className="mr-2 h-4 w-4" /> Export
+          <Button variant="outline" onClick={exportVendors}>
+            <ArrowDownToLine className="mr-2 h-4 w-4" /> Export
           </Button>
         </div>
       </div>

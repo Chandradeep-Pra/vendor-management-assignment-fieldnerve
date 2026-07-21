@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { navigations } from "./navigations";
-import { Button } from "../ui/button";
 
 const MobileNav = () => {
   const router = useRouter();
@@ -17,14 +16,13 @@ const MobileNav = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 md:hidden"
-          aria-label="Open mobile navigation"
-        >
+      <DropdownMenuTrigger
+        className="md:hidden"
+        aria-label="Open mobile navigation"
+      >
+        <span className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50">
           <Menu className="h-5 w-5" />
-        </Button>
+        </span>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-48">

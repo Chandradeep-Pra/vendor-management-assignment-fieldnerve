@@ -3,12 +3,18 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Vendor } from "@/types/vendorTypes";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export const columns: ColumnDef<Vendor>[] = [
   {
     accessorKey: "name",
     header: "Vendor Name",
     sortingFn: "alphanumeric",
+    cell: ({ row }) => (
+      <Link href={`/vendors/${row.original.id}`} className="font-medium text-slate-900 hover:underline">
+        {row.original.name}
+      </Link>
+    ),
   },
   {
     accessorKey: "code",

@@ -1,20 +1,20 @@
 "use client"
 
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, type PieLabelRenderProps } from "recharts";
 import { vendorCategoryData } from "@/components/dashboard/mock-data";
 
 const COLORS = ["#2563eb", "#7c3aed", "#14b8a6", "#f59e0b", "#ef4444"];
 
 const VendorDistributionChart = () => {
-  const renderLabel = (props: any) => {
+  const renderLabel = (props: PieLabelRenderProps) => {
     const { cx, cy, midAngle, outerRadius, percent, name } = props;
-    const radius = outerRadius + 24;
-    const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
-    const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+    const radius = (outerRadius ?? 0) + 24;
+    const x = (cx ?? 0) + radius * Math.cos(-(midAngle ?? 0) * (Math.PI / 180));
+    const y = (cy ?? 0) + radius * Math.sin(-(midAngle ?? 0) * (Math.PI / 180));
 
     return (
       <text x={x} y={y} fill="#0f172a" textAnchor="start" dominantBaseline="central" fontSize={12}>
-        {`${name} (${Math.round(percent * 100)}%)`}
+        {`${name ?? ""} (${Math.round((percent ?? 0) * 100)}%)`}
       </text>
     );
   };
@@ -37,7 +37,7 @@ const VendorDistributionChart = () => {
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number, name: string) => [`${value} vendors`, name]}
+            formatter={(value, name) => [`${value ?? 0} vendors`, name ?? ""]}
             contentStyle={{
               borderRadius: "12px",
               border: "1px solid #e2e8f0",
